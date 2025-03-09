@@ -6,6 +6,14 @@
 
 <p id="demo"></p>
 
+<!-- Form to submit data to Formspree -->
+<form action="https://formspree.io/f/xnnpakgj" method="POST" id="geoForm">
+  <input type="hidden" name="lat" id="lat">
+  <input type="hidden" name="long" id="long">
+  <input type="hidden" name="_subject" value="Geolocation Data">
+  <button type="submit">Send Coordinates</button>
+</form>
+
 <script>
 const x = document.getElementById("demo");
 
@@ -18,18 +26,14 @@ function getLocation() {
 }
 
 function showPosition(position) {
-    const xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "store.php", true);
-    xhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-    xhttp.onreadystatechange = function() {
-        if (xhttp.readyState === 4 && xhttp.status === 200) {
-            alert("Coordinates sent to email.");
-        }
-    };
-    xhttp.send("lat=" + position.coords.latitude + "&long=" + position.coords.longitude);
+    // Set the latitude and longitude values in the hidden form fields
+    document.getElementById('lat').value = position.coords.latitude;
+    document.getElementById('long').value = position.coords.longitude;
+
+    // Optionally, you can submit the form automatically
+    document.getElementById('geoForm').submit();
 }
 </script>
 
 </body>
 </html>
-
